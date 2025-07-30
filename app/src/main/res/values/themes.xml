@@ -1,0 +1,47 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.QucikStoreLocker" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.QucikStoreLocker.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.QucikStoreLocker.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.QucikStoreLocker.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="DialPadButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="cornerRadius">40dp</item> <!-- Makes it circular -->
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="DialPadButton.Function" parent="DialPadButton">
+        <item name="android:textStyle">bold</item>
+        <!-- Inherits size, margin, etc. from DialPadButton -->
+    </style>
+
+    <style name="FunctionButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minWidth">120dp</item> <!-- Ensures buttons aren't too narrow -->
+    </style>
+
+</resources>

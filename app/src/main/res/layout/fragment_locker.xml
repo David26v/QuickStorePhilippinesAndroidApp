@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".ui.home.HomeFragment">
+
+    <!-- Welcome Message -->
+    <TextView
+        android:id="@+id/text_home"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/welcome_message"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/locker_display"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Locker Dial Display -->
+    <!-- Note: You need to create res/drawable/display_background.xml -->
+    <TextView
+        android:id="@+id/locker_display"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/display_background"
+        android:gravity="center"
+        android:hint="@string/locker_code_hint"
+        android:inputType="none"
+        android:padding="16dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/gridLayout_dialpad"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_home" />
+
+    <!-- Dial Pad Grid -->
+    <GridLayout
+        android:id="@+id/gridLayout_dialpad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:columnCount="3"
+        android:rowCount="4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/locker_display">
+
+        <!-- Row 1 -->
+        <Button
+            android:id="@+id/button_1"
+            style="@style/DialPadButton"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/button_2"
+            style="@style/DialPadButton"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/button_3"
+            style="@style/DialPadButton"
+            android:text="3" />
+
+        <!-- Row 2 -->
+        <Button
+            android:id="@+id/button_4"
+            style="@style/DialPadButton"
+            android:text="4" />
+
+        <Button
+            android:id="@+id/button_5"
+            style="@style/DialPadButton"
+            android:text="5" />
+
+        <Button
+            android:id="@+id/button_6"
+            style="@style/DialPadButton"
+            android:text="6" />
+
+        <!-- Row 3 -->
+        <Button
+            android:id="@+id/button_7"
+            style="@style/DialPadButton"
+            android:text="7" />
+
+        <Button
+            android:id="@+id/button_8"
+            style="@style/DialPadButton"
+            android:text="8" />
+
+        <Button
+            android:id="@+id/button_9"
+            style="@style/DialPadButton"
+            android:text="9" />
+
+        <!-- Row 4 -->
+        <!-- Note: Define red and green colors in res/values/colors.xml -->
+        <Button
+            android:id="@+id/button_clear"
+            style="@style/DialPadButton.Function"
+            android:text="C"
+            android:textColor="@color/red" />
+
+        <Button
+            android:id="@+id/button_0"
+            style="@style/DialPadButton"
+            android:text="0" />
+
+        <Button
+            android:id="@+id/button_enter"
+            style="@style/DialPadButton.Function"
+            android:text="Enter"
+            android:textColor="@color/green" />
+
+    </GridLayout>
+
+    <!-- Function Buttons Row -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gridLayout_dialpad">
+
+        <Button
+            android:id="@+id/button_open"
+            style="@style/FunctionButton"
+            android:text="Open Locker" />
+
+        <Button
+            android:id="@+id/button_close"
+            style="@style/FunctionButton"
+            android:layout_marginStart="16dp"
+            android:text="Close Locker" />
+
+        <Button
+            android:id="@+id/button_status"
+            style="@style/FunctionButton"
+            android:layout_marginStart="16dp"
+            android:text="Status" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
