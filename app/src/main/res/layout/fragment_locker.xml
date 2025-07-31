@@ -4,154 +4,417 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5F5F5"
     android:padding="16dp"
     tools:context=".ui.home.HomeFragment">
 
-    <!-- Welcome Message -->
+    <!-- Header -->
     <TextView
         android:id="@+id/text_home"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/welcome_message"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@id/locker_display"
+        android:background="#2196F3"
+        android:elevation="4dp"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="QuickStore Locker System"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Locker Dial Display -->
-    <!-- Note: You need to create res/drawable/display_background.xml -->
-    <TextView
-        android:id="@+id/locker_display"
+    <!-- Locker Status Grid (24 Lockers in 4x6 grid) -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/status_card"
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/display_background"
-        android:gravity="center"
-        android:hint="@string/locker_code_hint"
-        android:inputType="none"
-        android:padding="16dp"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/gridLayout_dialpad"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_home" />
+        app:layout_constraintTop_toBottomOf="@+id/text_home">
 
-    <!-- Dial Pad Grid -->
-    <GridLayout
-        android:id="@+id/gridLayout_dialpad"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="12dp"
+                android:text="Locker Status Overview"
+                android:textColor="#1976D2"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- Locker Grid -->
+            <GridLayout
+                android:id="@+id/locker_status_grid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="6"
+                android:rowCount="4"
+                android:layout_gravity="center">
+
+                <!-- Locker status indicators will be added programmatically -->
+
+            </GridLayout>
+
+            <!-- Status Legend -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:background="#4CAF50" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Available"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:background="#F44336" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Occupied"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:background="#FF9800" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="Maintenance"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- Selected Locker Display -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/selected_locker_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="8dp"
+                android:text="Selected Locker"
+                android:textColor="#1976D2"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/selected_locker_number"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:hint="Tap a locker to select"
+                android:textColor="#1976D2"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- Code Input Display -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/code_input_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selected_locker_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="8dp"
+                android:text="Enter Access Code"
+                android:textColor="#1976D2"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/locker_display"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="#F8F9FA"
+                android:gravity="center"
+                android:hint="Enter your code"
+                android:inputType="none"
+                android:textColor="#1976D2"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- Dial Pad -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/dialpad_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:columnCount="3"
-        android:rowCount="4"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/locker_display">
+        app:layout_constraintTop_toBottomOf="@+id/code_input_card">
 
-        <!-- Row 1 -->
-        <Button
-            android:id="@+id/button_1"
-            style="@style/DialPadButton"
-            android:text="1" />
+        <GridLayout
+            android:id="@+id/gridLayout_dialpad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnCount="3"
+            android:padding="16dp"
+            android:rowCount="4">
 
-        <Button
-            android:id="@+id/button_2"
-            style="@style/DialPadButton"
-            android:text="2" />
+            <!-- Row 1 -->
+            <Button
+                android:id="@+id/button_1"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_margin="4dp"
+                android:backgroundTint="#2196F3"
+                android:text="1"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/button_3"
-            style="@style/DialPadButton"
-            android:text="3" />
+            <Button
+                android:id="@+id/button_2"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_margin="4dp"
+                android:backgroundTint="#2196F3"
+                android:text="2"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <!-- Row 2 -->
-        <Button
-            android:id="@+id/button_4"
-            style="@style/DialPadButton"
-            android:text="4" />
+            <Button
+                android:id="@+id/button_3"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_margin="4dp"
+                android:backgroundTint="#2196F3"
+                android:text="3"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/button_5"
-            style="@style/DialPadButton"
-            android:text="5" />
+            <!-- Row 2 -->
+            <Button
+                android:id="@+id/button_4"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_margin="4dp"
+                android:backgroundTint="#2196F3"
+                android:text="4"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/button_6"
-            style="@style/DialPadButton"
-            android:text="6" />
+            <Button
+                android:id="@+id/button_5"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_margin="4dp"
+                android:backgroundTint="#2196F3"
+                android:text="5"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <!-- Row 3 -->
-        <Button
-            android:id="@+id/button_7"
-            style="@style/DialPadButton"
-            android:text="7" />
+            <Button
+                android:id="@+id/button_6"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_margin="4dp"
+                android:backgroundTint="#2196F3"
+                android:text="6"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/button_8"
-            style="@style/DialPadButton"
-            android:text="8" />
+            <!-- Row 3 -->
+            <Button
+                android:id="@+id/button_7"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_margin="4dp"
+                android:backgroundTint="#2196F3"
+                android:text="7"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/button_9"
-            style="@style/DialPadButton"
-            android:text="9" />
+            <Button
+                android:id="@+id/button_8"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_margin="4dp"
+                android:backgroundTint="#2196F3"
+                android:text="8"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <!-- Row 4 -->
-        <!-- Note: Define red and green colors in res/values/colors.xml -->
-        <Button
-            android:id="@+id/button_clear"
-            style="@style/DialPadButton.Function"
-            android:text="C"
-            android:textColor="@color/red" />
+            <Button
+                android:id="@+id/button_9"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_margin="4dp"
+                android:backgroundTint="#2196F3"
+                android:text="9"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/button_0"
-            style="@style/DialPadButton"
-            android:text="0" />
+            <!-- Row 4 -->
+            <Button
+                android:id="@+id/button_clear"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_margin="4dp"
+                android:backgroundTint="#6C757D"
+                android:text="Clear"
+                android:textColor="#F44336"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/button_enter"
-            style="@style/DialPadButton.Function"
-            android:text="Enter"
-            android:textColor="@color/green" />
+            <Button
+                android:id="@+id/button_0"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_margin="4dp"
+                android:backgroundTint="#2196F3"
+                android:text="0"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-    </GridLayout>
+            <Button
+                android:id="@+id/button_enter"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_margin="4dp"
+                android:backgroundTint="#6C757D"
+                android:text="Enter"
+                android:textColor="#4CAF50"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-    <!-- Function Buttons Row -->
+        </GridLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- Function Buttons -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gridLayout_dialpad">
+        app:layout_constraintTop_toBottomOf="@+id/dialpad_card">
 
         <Button
             android:id="@+id/button_open"
-            style="@style/FunctionButton"
-            android:text="Open Locker" />
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:minWidth="100dp"
+            android:backgroundTint="#4CAF50"
+            android:text="Open"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button_close"
-            style="@style/FunctionButton"
-            android:layout_marginStart="16dp"
-            android:text="Close Locker" />
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:minWidth="100dp"
+            android:layout_marginStart="12dp"
+            android:backgroundTint="#F44336"
+            android:text="Close"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button_status"
-            style="@style/FunctionButton"
-            android:layout_marginStart="16dp"
-            android:text="Status" />
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:minWidth="100dp"
+            android:layout_marginStart="12dp"
+            android:backgroundTint="#2196F3"
+            android:text="Status"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
