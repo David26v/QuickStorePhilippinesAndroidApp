@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- You can add icons or descriptions for each method if desired -->
+    <Button
+        android:id="@+id/button_method_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enter Access Code"
+        style="@style/Widget.Material3.Button" /> <!-- Use your preferred button style -->
+
+    <Button
+        android:id="@+id/button_method_qr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scan QR Code"
+        android:layout_marginTop="8dp"
+        style="@style/Widget.Material3.Button.OutlinedButton" /> <!-- Example style -->
+
+    <Button
+        android:id="@+id/button_method_face"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Face Recognition"
+        android:layout_marginTop="8dp"
+        style="@style/Widget.Material3.Button.OutlinedButton" />
+
+    <Button
+        android:id="@+id/button_method_fingerprint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fingerprint Scanner"
+        android:layout_marginTop="8dp"
+        style="@style/Widget.Material3.Button.OutlinedButton" />
+
+</LinearLayout>

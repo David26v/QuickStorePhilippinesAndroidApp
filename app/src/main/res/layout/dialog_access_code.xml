@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Ensure @drawable/code_display_background exists in your res/drawable folder -->
+    <!-- Ensure @color/primary_dark exists in your res/color folder -->
+    <TextView
+        android:id="@+id/dialog_locker_display"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/code_display_background"
+        android:gravity="center"
+        android:hint="Enter your code"
+        android:inputType="none"
+        android:textColor="@color/primary_dark"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"
+        android:elevation="2dp"/>
+
+    <GridLayout
+        android:id="@+id/dialog_gridLayout_dialpad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:rowCount="4"
+        android:layout_gravity="center">
+
+        <!-- Row 1 -->
+        <Button
+            android:id="@+id/dialog_button_1"
+            style="@style/DialPadButton"
+            android:text="1" />
+        <Button
+            android:id="@+id/dialog_button_2"
+            style="@style/DialPadButton"
+            android:text="2" />
+        <Button
+            android:id="@+id/dialog_button_3"
+            style="@style/DialPadButton"
+            android:text="3" />
+
+        <!-- Row 2 -->
+        <Button
+            android:id="@+id/dialog_button_4"
+            style="@style/DialPadButton"
+            android:text="4" />
+        <Button
+            android:id="@+id/dialog_button_5"
+            style="@style/DialPadButton"
+            android:text="5" />
+        <Button
+            android:id="@+id/dialog_button_6"
+            style="@style/DialPadButton"
+            android:text="6" />
+
+        <!-- Row 3 -->
+        <Button
+            android:id="@+id/dialog_button_7"
+            style="@style/DialPadButton"
+            android:text="7" />
+        <Button
+            android:id="@+id/dialog_button_8"
+            style="@style/DialPadButton"
+            android:text="8" />
+        <Button
+            android:id="@+id/dialog_button_9"
+            style="@style/DialPadButton"
+            android:text="9" />
+
+        <!-- Row 4 -->
+        <!-- Ensure @color/error_red exists in your res/color folder -->
+        <Button
+            android:id="@+id/dialog_button_clear"
+            style="@style/DialPadButtonFunction"
+            android:text="Clear"
+            android:textColor="@color/error_red" />
+        <Button
+            android:id="@+id/dialog_button_0"
+            style="@style/DialPadButton"
+            android:text="0" />
+        <!-- Ensure @color/success_green exists in your res/color folder -->
+        <Button
+            android:id="@+id/dialog_button_enter"
+            style="@style/DialPadButtonFunction"
+            android:text="Enter"
+            android:textColor="@color/success_green" />
+    </GridLayout>
+
+</LinearLayout>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QucikStore Philippines</string>
+    <string name="app_name">QuickStore Philippines</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -13,4 +13,15 @@
 
     <string name="welcome_message">Welcome to the Quick Store locker</string>
     <string name="locker_code_hint">Enter Code</string>
+
+
+
+    <string name="select_locker_hint">Tap a locker to select</string>
+    <string name="locker_status_overview">Locker Status Overview</string>
+    <string name="selected_locker">Selected Locker</string>
+    <string name="enter_access_code">Enter Access Code</string>
+    <string name="status_available">Available</string>
+    <string name="status_occupied">Occupied</string>
+    <string name="status_maintenance">Maintenance</string>
+
 </resources>

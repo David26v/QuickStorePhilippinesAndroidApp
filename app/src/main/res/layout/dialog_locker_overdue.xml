@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- Greeting Section -->
+    <TextView
+        android:id="@+id/dialog_overdue_greeting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="Hi [User Name],"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <!-- Overdue Message Section -->
+    <TextView
+        android:id="@+id/dialog_overdue_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:text="Your locker is overdue!"
+        android:textColor="@color/error_red"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <!-- Locker Info Card -->
+<com.google.android.material.card.MaterialCardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/dialog_overdue_locker_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Locker #XX"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dialog_overdue_user_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="User ID: XXXX"
+        android:textSize="14sp" />
+
+    <!-- Overdue Duration Section -->
+    <TextView
+        android:id="@+id/dialog_overdue_duration_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        android:text="Overdue Duration:"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dialog_overdue_duration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calculating..."
+        android:textSize="14sp" />
+
+</LinearLayout>
+</com.google.android.material.card.MaterialCardView>
+
+    <!-- Action Buttons -->
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="end">
+
+    <!-- End Session Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_end_session"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="End Session"
+        app:icon="@drawable/ic_logout"
+        app:iconGravity="textStart" />
+
+    <!-- Pick Item Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_pickup"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pick Item"
+        app:backgroundTint="@color/error_red"
+        app:icon="@drawable/ic_download"
+        app:iconGravity="textStart" />
+
+    </LinearLayout>
+
+    </LinearLayout>
