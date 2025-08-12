@@ -3,6 +3,7 @@ package com.example.quickstorephilippinesandroidapp.ui.home
 import java.util.concurrent.TimeUnit
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,53 +13,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.quickstorephilippinesandroidapp.MainActivity
 import com.example.quickstorephilippinesandroidapp.R
+import com.example.quickstorephilippinesandroidapp.data.Locker
+import com.example.quickstorephilippinesandroidapp.data.LockerStatus
 import com.example.quickstorephilippinesandroidapp.databinding.FragmentHomeBinding
 import com.google.android.material.snackbar.Snackbar
-import com.ys.rkapi.MyManager
-
-
-data class Locker(
-    val id: Int,
-    val status: LockerStatus,
-    val lastAccessTime: Long? = null,
-    val assignedUser: AssignedUserInfo? = null,
-    val location: String? = null
-) {
-    fun getStatusColor(): Int {
-        return when (status) {
-            LockerStatus.AVAILABLE -> Color.parseColor("#4CAF50") // Green
-            LockerStatus.OCCUPIED -> Color.parseColor("#F44336") // Red
-            LockerStatus.OVERDUE -> Color.parseColor("#FF9800") // Orange
-        }
-    }
-
-    fun getStatusText(): String {
-        return when (status) {
-            LockerStatus.AVAILABLE -> "Available"
-            LockerStatus.OCCUPIED -> "Occupied"
-            LockerStatus.OVERDUE -> "Overdue"
-        }
-    }
-
-    fun isAccessible(): Boolean {
-        return true
-    }
-}
-
-
-data class AssignedUserInfo(
-    val userId: String,
-    val firstName: String,
-    val lastName: String
-)
-
-
-enum class LockerStatus {
-    AVAILABLE,
-    OCCUPIED,
-    OVERDUE
-}
 
 class HomeFragment : Fragment() {
 
@@ -68,31 +28,8 @@ class HomeFragment : Fragment() {
 
     private var currentInput = ""
     private var selectedLockerId: Int = -1
-
-
-    private val lockerMap = mutableMapOf<Int, Locker>().apply {
-        for (i in 1..24) {
-
-            val status = when {
-                i % 8 == 0 -> LockerStatus.OCCUPIED
-                i == 7 || i == 15 || i == 23 -> LockerStatus.OVERDUE
-                else -> LockerStatus.AVAILABLE
-            }
-
-            this[i] = Locker(
-                id = i,
-                status = status,
-                lastAccessTime = if (status == LockerStatus.OCCUPIED || status == LockerStatus.OVERDUE) System.currentTimeMillis() - (10 + i % 5) * 60 * 1000
-                else null,
-                assignedUser = if (status == LockerStatus.OCCUPIED || status == LockerStatus.OVERDUE) AssignedUserInfo(
-                    userId = "user_$i",
-                    firstName = "First$i",
-                    lastName = "Last$i"
-                ) else null,
-                location = "Row ${(i - 1) / 6 + 1}, Column ${(i - 1) % 6 + 1}"
-            )
-        }
-    }
+    private var lockerList: List<Locker> = emptyList()
+    private var availableAuthMethods: List<String> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -102,17 +39,57 @@ class HomeFragment : Fragment() {
         homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        setupLockerStatusGrid()
+
+        // Observe lockers data from ViewModel
+        homeViewModel.lockers.observe(viewLifecycleOwner) { lockers ->
+            lockerList = lockers
+            setupLockerStatusGrid()
+        }
+
+        // Listen for client ID availability
+        MainActivity.onClientIdAvailable = {
+            activity?.runOnUiThread {
+                loadLockersWithClientId()
+            }
+        }
+
+        // Try to load immediately in case client ID is already available
+        binding.root.post {
+            loadLockersWithClientId()
+        }
+
         return root
+    }
+
+    private fun loadLockersWithClientId() {
+        val clientId = MainActivity.CLIENT_ID
+        if (clientId != null && clientId.isNotEmpty()) {
+            homeViewModel.loadLockers(clientId)
+        } else {
+            // Retry after a short delay
+            view?.postDelayed({
+                val retryClientId = MainActivity.CLIENT_ID
+                if (retryClientId != null && retryClientId.isNotEmpty()) {
+                    homeViewModel.loadLockers(retryClientId)
+                } else {
+                    try {
+                        Snackbar.make(binding.root, "Client ID not available. Please restart the app.", Snackbar.LENGTH_LONG).show()
+                    } catch (e: Exception) {
+                        // Ignore if Snackbar fails
+                    }
+                }
+            }, 1000)
+        }
     }
 
     private fun setupLockerStatusGrid() {
         val grid = binding.lockerStatusGrid
         grid.removeAllViews()
-        for (lockerNumber in 1..24) {
-            val locker = lockerMap[lockerNumber] ?: continue
+
+        // Use the lockerList from ViewModel instead of mock data
+        for (locker in lockerList) {
             val lockerButton = Button(requireContext()).apply {
-                text = lockerNumber.toString()
+                text = locker.id.toString()
                 textSize = 18f
                 val sizeInDp = 80
                 val density = resources.displayMetrics.density
@@ -127,7 +104,7 @@ class HomeFragment : Fragment() {
                 setTextColor(Color.WHITE)
                 isEnabled = locker.isAccessible()
                 setOnClickListener {
-                    selectLocker(lockerNumber)
+                    selectLocker(locker.id)
                 }
             }
             grid.addView(lockerButton)
@@ -135,7 +112,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun selectLocker(lockerId: Int) {
-        val locker = lockerMap[lockerId]
+        val locker = lockerList.find { it.id == lockerId }
         if (locker == null) {
             Snackbar.make(binding.root, "Invalid locker selected", Snackbar.LENGTH_SHORT).show()
             return
@@ -143,7 +120,6 @@ class HomeFragment : Fragment() {
         selectedLockerId = lockerId
         showLockerSelectedDialog(locker)
     }
-
 
     private fun showLockerSelectedDialog(locker: Locker) {
         when (locker.status) {
@@ -157,6 +133,9 @@ class HomeFragment : Fragment() {
 
                 lockerInfoText.text = "Locker #${locker.id}\nStatus: ${locker.getStatusText()}\nLocation: ${locker.location ?: "N/A"}"
 
+                // Load client auth methods and update button visibility
+                loadAndApplyAuthMethods(accessCodeButton, qrCodeButton, faceRecognitionButton, fingerprintButton)
+
                 val dialog = AlertDialog.Builder(requireContext())
                     .setView(dialogView)
                     .create()
@@ -167,18 +146,18 @@ class HomeFragment : Fragment() {
                 }
                 qrCodeButton.setOnClickListener {
                     dialog.dismiss()
-                    // TODO: Implement QR Code logic
-                    Snackbar.make(binding.root, "QR Code access selected for Locker #${locker.id}", Snackbar.LENGTH_LONG).show()
+                    // TODO: Implement QR code functionality
+                    Snackbar.make(binding.root, "QR Code functionality will be implemented", Snackbar.LENGTH_LONG).show()
                 }
                 faceRecognitionButton.setOnClickListener {
                     dialog.dismiss()
-                    // TODO: Implement Face Recognition logic
-                    Snackbar.make(binding.root, "Face Recognition selected for Locker #${locker.id}", Snackbar.LENGTH_LONG).show()
+                    // TODO: Implement face recognition functionality
+                    Snackbar.make(binding.root, "Face recognition functionality will be implemented", Snackbar.LENGTH_LONG).show()
                 }
                 fingerprintButton.setOnClickListener {
                     dialog.dismiss()
-                    // TODO: Implement Fingerprint logic
-                    Snackbar.make(binding.root, "Fingerprint Scanner selected for Locker #${locker.id}", Snackbar.LENGTH_LONG).show()
+                    // TODO: Implement fingerprint functionality
+                    Snackbar.make(binding.root, "Fingerprint functionality will be implemented", Snackbar.LENGTH_LONG).show()
                 }
                 dialog.show()
             }
@@ -193,11 +172,31 @@ class HomeFragment : Fragment() {
         }
     }
 
-    // --- New Function: Show Occupied Locker Dialog ---
+    private fun loadAndApplyAuthMethods(
+        accessCodeButton: Button,
+        qrCodeButton: Button,
+        faceRecognitionButton: Button,
+        fingerprintButton: Button
+    ) {
+        val clientId = MainActivity.CLIENT_ID
+        if (clientId != null) {
+            homeViewModel.getClientAuthMethods(clientId) { authMethods ->
+                availableAuthMethods = authMethods
+
+                // Update UI on main thread
+                activity?.runOnUiThread {
+                    // Show/hide buttons based on client settings
+                    accessCodeButton.visibility = if (authMethods.contains("access_code")) View.VISIBLE else View.GONE
+                    qrCodeButton.visibility = if (authMethods.contains("qr_code")) View.VISIBLE else View.GONE
+                    faceRecognitionButton.visibility = if (authMethods.contains("face_recognition")) View.VISIBLE else View.GONE
+                    fingerprintButton.visibility = if (authMethods.contains("fingerprint")) View.VISIBLE else View.GONE
+                }
+            }
+        }
+    }
+
     private fun showOccupiedLockerDialog(locker: Locker) {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_locker_occupied, null)
-
-        // Find views in the occupied layout
         val greetingText: TextView = dialogView.findViewById(R.id.dialog_occupied_greeting)
         val questionText: TextView = dialogView.findViewById(R.id.dialog_occupied_question)
         val lockerInfoText: TextView = dialogView.findViewById(R.id.dialog_occupied_locker_info)
@@ -207,17 +206,14 @@ class HomeFragment : Fragment() {
         val endSessionButton: Button = dialogView.findViewById(R.id.button_end_session)
         val pickupButton: Button = dialogView.findViewById(R.id.button_pickup)
 
-        // --- Calculate Duration ---
         val durationString = locker.lastAccessTime?.let { accessTime ->
             val currentTime = System.currentTimeMillis()
             val durationMillis = currentTime - accessTime
             formatDuration(durationMillis)
         } ?: "Unknown"
 
-
         val userName = locker.assignedUser?.let { "${it.firstName} ${it.lastName}" } ?: "User"
         greetingText.text = "Hi $userName,"
-
         lockerInfoText.text = "Locker #${locker.id}"
         locker.assignedUser?.let { userInfo ->
             userIdText.text = "User ID: ${userInfo.userId}"
@@ -232,18 +228,17 @@ class HomeFragment : Fragment() {
 
         endSessionButton.setOnClickListener {
             dialog.dismiss()
-            showAccessCodeDialog(locker)
+            showAuthMethodsForOccupiedLocker(locker, "end_session")
         }
 
         pickupButton.setOnClickListener {
             dialog.dismiss()
-            showAccessCodeDialog(locker)
+            showAuthMethodsForOccupiedLocker(locker, "pickup")
         }
 
         dialog.show()
     }
 
-    // --- New Function: Show Overdue Locker Dialog ---
     private fun showOverdueLockerDialog(locker: Locker) {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_locker_overdue, null)
         val greetingText: TextView = dialogView.findViewById(R.id.dialog_overdue_greeting)
@@ -255,17 +250,14 @@ class HomeFragment : Fragment() {
         val endSessionButton: Button = dialogView.findViewById(R.id.button_end_session)
         val pickupButton: Button = dialogView.findViewById(R.id.button_pickup)
 
-
         val overdueDurationString = locker.lastAccessTime?.let { accessTime ->
             val currentTime = System.currentTimeMillis()
             val overdueMillis = currentTime - accessTime
             formatDuration(overdueMillis)
         } ?: "Unknown"
 
-
         val userName = locker.assignedUser?.let { "${it.firstName} ${it.lastName}" } ?: "User"
         greetingText.text = "Hi $userName,"
-
         lockerInfoText.text = "Locker #${locker.id}"
         locker.assignedUser?.let { userInfo ->
             userIdText.text = "User ID: ${userInfo.userId}"
@@ -280,18 +272,184 @@ class HomeFragment : Fragment() {
 
         endSessionButton.setOnClickListener {
             dialog.dismiss()
-            showAccessCodeDialog(locker)
+            showAuthMethodsForOccupiedLocker(locker, "end_session")
         }
 
         pickupButton.setOnClickListener {
             dialog.dismiss()
-            showAccessCodeDialog(locker)
+            showAuthMethodsForOccupiedLocker(locker, "pickup")
         }
 
         dialog.show()
     }
 
-    // --- Ensure formatDuration is present ---
+    private fun showAuthMethodsForOccupiedLocker(locker: Locker, action: String) {
+        // Reuse the same dialog as available lockers but hide the end session and pickup buttons
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_locker_selected, null)
+        val lockerInfoText: TextView = dialogView.findViewById(R.id.dialog_locker_info)
+        val accessCodeButton: Button = dialogView.findViewById(R.id.button_access_code)
+        val qrCodeButton: Button = dialogView.findViewById(R.id.button_qr_code)
+        val faceRecognitionButton: Button = dialogView.findViewById(R.id.button_face_recognition)
+        val fingerprintButton: Button = dialogView.findViewById(R.id.button_fingerprint)
+
+        // Try to find end session and pickup buttons (they might not exist in this layout)
+        val endSessionButton = dialogView.findViewById<Button>(R.id.button_end_session)
+        val pickupButton = dialogView.findViewById<Button>(R.id.button_pickup)
+
+        // Hide end session and pickup buttons if they exist
+        endSessionButton?.visibility = View.GONE
+        pickupButton?.visibility = View.GONE
+
+        lockerInfoText.text = "Locker #${locker.id}\nStatus: ${locker.getStatusText()}\nLocation: ${locker.location ?: "N/A"}"
+
+        // Load client auth methods and update button visibility
+        loadAndApplyAuthMethods(accessCodeButton, qrCodeButton, faceRecognitionButton, fingerprintButton)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        accessCodeButton.setOnClickListener {
+            dialog.dismiss()
+            showAccessCodeDialogForAction(locker, action)
+        }
+        qrCodeButton.setOnClickListener {
+            dialog.dismiss()
+            // TODO: Implement QR code functionality
+            Snackbar.make(binding.root, "QR Code functionality will be implemented", Snackbar.LENGTH_LONG).show()
+        }
+        faceRecognitionButton.setOnClickListener {
+            dialog.dismiss()
+            // TODO: Implement face recognition functionality
+            Snackbar.make(binding.root, "Face recognition functionality will be implemented", Snackbar.LENGTH_LONG).show()
+        }
+        fingerprintButton.setOnClickListener {
+            dialog.dismiss()
+            // TODO: Implement fingerprint functionality
+            Snackbar.make(binding.root, "Fingerprint functionality will be implemented", Snackbar.LENGTH_LONG).show()
+        }
+
+        dialog.show()
+    }
+
+    private fun showAccessCodeDialogForAction(locker: Locker, action: String) {
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_access_code, null)
+        val codeDisplay: TextView = dialogView.findViewById(R.id.dialog_locker_display)
+        val button0: Button = dialogView.findViewById(R.id.dialog_button_0)
+        val button1: Button = dialogView.findViewById(R.id.dialog_button_1)
+        val button2: Button = dialogView.findViewById(R.id.dialog_button_2)
+        val button3: Button = dialogView.findViewById(R.id.dialog_button_3)
+        val button4: Button = dialogView.findViewById(R.id.dialog_button_4)
+        val button5: Button = dialogView.findViewById(R.id.dialog_button_5)
+        val button6: Button = dialogView.findViewById(R.id.dialog_button_6)
+        val button7: Button = dialogView.findViewById(R.id.dialog_button_7)
+        val button8: Button = dialogView.findViewById(R.id.dialog_button_8)
+        val button9: Button = dialogView.findViewById(R.id.dialog_button_9)
+        val buttonClear: Button = dialogView.findViewById(R.id.dialog_button_clear)
+        val buttonEnter: Button = dialogView.findViewById(R.id.dialog_button_enter)
+
+        var localInput = ""
+        codeDisplay.text = ""
+        codeDisplay.hint = "Enter your code"
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("Enter Access Code")
+            .setView(dialogView)
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        val appendNumber = { number: String ->
+            if (localInput.length < 8) {
+                localInput += number
+                codeDisplay.text = "*".repeat(localInput.length)
+            } else {
+                Snackbar.make(dialogView, "Maximum code length reached", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+
+        button0.setOnClickListener { appendNumber("0") }
+        button1.setOnClickListener { appendNumber("1") }
+        button2.setOnClickListener { appendNumber("2") }
+        button3.setOnClickListener { appendNumber("3") }
+        button4.setOnClickListener { appendNumber("4") }
+        button5.setOnClickListener { appendNumber("5") }
+        button6.setOnClickListener { appendNumber("6") }
+        button7.setOnClickListener { appendNumber("7") }
+        button8.setOnClickListener { appendNumber("8") }
+        button9.setOnClickListener { appendNumber("9") }
+
+        buttonClear.setOnClickListener {
+            localInput = ""
+            codeDisplay.text = ""
+            codeDisplay.hint = "Enter your code"
+        }
+
+        buttonEnter.setOnClickListener {
+            if (localInput.isNotEmpty()) {
+                val isValidCode = localInput.length >= 4
+                if (isValidCode) {
+                    val accessCodeToUse = localInput
+
+                    dialog.setTitle("Validating Access Code...")
+                    dialog.setCancelable(false)
+
+                    homeViewModel.validateAccessCode(accessCodeToUse) { validationSuccess, userId, message ->
+                        activity?.runOnUiThread {
+                            if (validationSuccess && userId != null) {
+                                // Code is valid, now proceed with the action
+                                when (action) {
+                                    "end_session" -> {
+                                        dialog.setTitle("Ending Session...")
+                                        homeViewModel.endLockerSession(locker.doorId, userId, accessCodeToUse) { success, message ->
+                                            activity?.runOnUiThread {
+                                                if (success) {
+                                                    Snackbar.make(binding.root, "Session ended successfully! Door opened for pickup.", Snackbar.LENGTH_LONG).show()
+                                                    homeViewModel.refreshLockers()
+                                                    dialog.dismiss()
+                                                } else {
+                                                    Snackbar.make(binding.root, "Failed to end session: $message", Snackbar.LENGTH_LONG).show()
+                                                    dialog.dismiss()
+                                                }
+                                            }
+                                        }
+                                    }
+                                    "pickup" -> {
+                                        dialog.setTitle("Processing Pickup...")
+                                        homeViewModel.pickupItem(locker.doorId, userId, accessCodeToUse) { success, message ->
+                                            activity?.runOnUiThread {
+                                                if (success) {
+                                                    Snackbar.make(binding.root, "Door opened for pickup!", Snackbar.LENGTH_LONG).show()
+                                                    homeViewModel.refreshLockers()
+                                                    dialog.dismiss()
+                                                } else {
+                                                    Snackbar.make(binding.root, "Failed to open door: $message", Snackbar.LENGTH_LONG).show()
+                                                    dialog.dismiss()
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                Snackbar.make(binding.root, "Invalid access code: $message", Snackbar.LENGTH_LONG).show()
+                                dialog.dismiss()
+                            }
+                        }
+                    }
+                } else {
+                    Snackbar.make(dialogView, "Invalid code. Please try again.", Snackbar.LENGTH_SHORT).show()
+                }
+            } else {
+                Snackbar.make(dialogView, "Please enter a code", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+
+        dialog.setOnDismissListener {
+            localInput = ""
+        }
+
+        dialog.show()
+    }
+
     private fun formatDuration(durationMillis: Long): String {
         val hours = TimeUnit.MILLISECONDS.toHours(durationMillis)
         val minutes = TimeUnit.MILLISECONDS.toMinutes(durationMillis) % 60
@@ -307,7 +465,6 @@ class HomeFragment : Fragment() {
                 append("$minutes minute")
                 if (minutes > 1) append("s")
             }
-
             if (isNotEmpty() && seconds > 0) {
                 append(" $seconds second")
                 if (seconds > 1) append("s")
@@ -335,21 +492,21 @@ class HomeFragment : Fragment() {
         val buttonClear: Button = dialogView.findViewById(R.id.dialog_button_clear)
         val buttonEnter: Button = dialogView.findViewById(R.id.dialog_button_enter)
 
-        // Reset input for new dialog
-        currentInput = ""
+        // Create a local copy that won't be modified
+        var localInput = ""
         codeDisplay.text = ""
         codeDisplay.hint = "Enter your code"
 
         val dialog = AlertDialog.Builder(requireContext())
-            .setTitle("Enter Access Code for Locker #${locker.id}")
+            .setTitle("Enter Access Code")
             .setView(dialogView)
             .setNegativeButton("Cancel", null)
             .create()
 
         val appendNumber = { number: String ->
-            if (currentInput.length < 8) {
-                currentInput += number
-                codeDisplay.text = "*".repeat(currentInput.length)
+            if (localInput.length < 8) {
+                localInput += number
+                codeDisplay.text = "*".repeat(localInput.length)
             } else {
                 Snackbar.make(dialogView, "Maximum code length reached", Snackbar.LENGTH_SHORT).show()
             }
@@ -367,86 +524,103 @@ class HomeFragment : Fragment() {
         button9.setOnClickListener { appendNumber("9") }
 
         buttonClear.setOnClickListener {
-            currentInput = ""
+            localInput = ""
             codeDisplay.text = ""
             codeDisplay.hint = "Enter your code"
         }
 
         buttonEnter.setOnClickListener {
-            if (currentInput.isNotEmpty()) {
-                val isValidCode = currentInput.length >= 4
+            if (localInput.isNotEmpty()) {
+                val isValidCode = localInput.length >= 4
                 if (isValidCode) {
+                    val accessCodeToUse = localInput
+
                     when (locker.status) {
                         LockerStatus.AVAILABLE -> {
-                            val updatedLocker = locker.copy(
-                                status = LockerStatus.OCCUPIED,
-                                lastAccessTime = System.currentTimeMillis(),
-                                assignedUser = AssignedUserInfo(
-                                    userId = "CurrentUser",
-                                    firstName = "Current",
-                                    lastName = "User"
-                                )
-                            )
-                            lockerMap[selectedLockerId] = updatedLocker
-                            refreshLockerGrid()
-                            dialog.dismiss()
-                            Snackbar.make(binding.root, "Locker #${selectedLockerId} assigned successfully!", Snackbar.LENGTH_LONG).show()
-                        }
-                        LockerStatus.OCCUPIED -> {
-                            val updatedLocker = locker.copy(
-                                status = LockerStatus.AVAILABLE,
-                                lastAccessTime = System.currentTimeMillis(),
-                                assignedUser = null
-                            )
-                            lockerMap[selectedLockerId] = updatedLocker
-                            refreshLockerGrid()
-                            dialog.dismiss()
-                            Snackbar.make(binding.root, "Locker #${selectedLockerId} opened for pickup!", Snackbar.LENGTH_LONG).show()
-                        }
-                        LockerStatus.OVERDUE -> {
+                            // For available lockers: Validate code, ASSIGN, then simulate OPEN
+                            dialog.setTitle("Validating Access Code...")
+                            dialog.setCancelable(false)
 
-                            val updatedLocker = locker.copy(
-                                status = LockerStatus.AVAILABLE,
-                                lastAccessTime = System.currentTimeMillis(),
-                                assignedUser = null
-                            )
-                            lockerMap[selectedLockerId] = updatedLocker
-                            refreshLockerGrid()
-                            dialog.dismiss()
-                            Snackbar.make(binding.root, "Locker #${selectedLockerId} opened for pickup (was overdue)!", Snackbar.LENGTH_LONG).show()
+                            homeViewModel.validateAccessCode(accessCodeToUse) { validationSuccess, userId, message ->
+                                activity?.runOnUiThread {
+                                    if (validationSuccess && userId != null) {
+                                        // Code is valid, now assign the locker to the user
+                                        val doorId = locker.doorId
+                                        if (doorId != null) {
+                                            dialog.setTitle("Assigning Locker...")
+
+                                            // ASSIGN the locker first (this updates status to "occupied")
+                                            homeViewModel.assignLockerToUser(doorId, userId, accessCodeToUse) { assignSuccess, assignMessage ->
+                                                activity?.runOnUiThread {
+                                                    if (assignSuccess) {
+                                                        // Assignment successful - locker is now "occupied"
+                                                        // Simulate door opening (you can add actual door control here later)
+                                                        dialog.setTitle("Opening Locker...")
+
+                                                        // Add a small delay to simulate door opening
+                                                        dialogView.postDelayed({
+                                                            Snackbar.make(binding.root, "Locker assigned and opened successfully!", Snackbar.LENGTH_LONG).show()
+                                                            // Refresh lockers to show updated status (should be "occupied" now)
+                                                            homeViewModel.refreshLockers()
+                                                            dialog.dismiss()
+                                                        }, 1000)
+
+                                                    } else {
+                                                        Snackbar.make(binding.root, "Failed to assign locker: $assignMessage", Snackbar.LENGTH_LONG).show()
+                                                        dialog.dismiss()
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            Snackbar.make(binding.root, "Locker door ID not found", Snackbar.LENGTH_LONG).show()
+                                            dialog.dismiss()
+                                        }
+                                    } else {
+                                        Snackbar.make(binding.root, "Invalid access code: $message", Snackbar.LENGTH_LONG).show()
+                                        dialog.dismiss()
+                                    }
+                                }
+                            }
+                        }
+
+                        LockerStatus.OCCUPIED, LockerStatus.OVERDUE -> {
+                            // For occupied/overdue lockers, just refresh the UI (simulate pickup)
+                            dialog.setTitle("Processing...")
+                            dialog.setCancelable(false)
+
+                            // Add a small delay to simulate processing
+                            dialogView.postDelayed({
+                                Snackbar.make(binding.root, "Locker accessed successfully!", Snackbar.LENGTH_LONG).show()
+                                homeViewModel.refreshLockers()
+                                dialog.dismiss()
+                            }, 1000)
                         }
                     }
-                }
-                else {
+                } else {
                     Snackbar.make(dialogView, "Invalid code. Please try again.", Snackbar.LENGTH_SHORT).show()
                 }
-                // Clear the input
-                currentInput = ""
-                codeDisplay.text = ""
-                codeDisplay.hint = "Enter your code"
             } else {
                 Snackbar.make(dialogView, "Please enter a code", Snackbar.LENGTH_SHORT).show()
             }
         }
+
+        dialog.setOnDismissListener {
+            localInput = ""
+        }
+
         dialog.show()
     }
 
-    private fun refreshLockerGrid() {
-        val grid = binding.lockerStatusGrid
-        for (i in 0 until grid.childCount) {
-            val button = grid.getChildAt(i) as Button
-            val lockerId = i + 1
-            val locker = lockerMap[lockerId]
-            if (locker != null) {
-                button.setBackgroundColor(locker.getStatusColor())
-                button.isEnabled = locker.isAccessible()
-                button.setTextColor(Color.WHITE)
-            }
-        }
+    private fun showAccessCodeDialogForPickup(locker: Locker) {
+        showAccessCodeDialog(locker)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        // Clean up listener
+        if (MainActivity.onClientIdAvailable != null) {
+            MainActivity.onClientIdAvailable = null
+        }
         _binding = null
     }
 }

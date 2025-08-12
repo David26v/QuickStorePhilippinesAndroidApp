@@ -1,107 +1,204 @@
-package repository
+package com.example.quickstorephilippinesandroidapp.repository
 
-import data.Locker
-import data.LockerStatus
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import api.ApiClient
+import com.example.quickstorephilippinesandroidapp.api.LockerSessionRequest
+import com.example.quickstorephilippinesandroidapp.data.Locker
+import data.LockerApiResponse
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LockerRepository {
 
-    private val _lockers = MutableStateFlow(generateInitialLockers())
-    val lockers: StateFlow<List<Locker>> = _lockers
+    private val apiService = ApiClient.apiService
 
-    private fun generateInitialLockers(): List<Locker> {
-        return (1..24).map { id ->
-            val status = when {
-                id % 8 == 0 -> LockerStatus.OCCUPIED
-                id == 7 || id == 15 || id == 23 -> LockerStatus.OVERDUE
-                else -> LockerStatus.AVAILABLE
+    fun getLockers(clientId: String, callback: (List<Locker>) -> Unit) {
+        apiService.getLockerStatuses(clientId).enqueue(object : Callback<List<LockerApiResponse>> {
+            override fun onResponse(call: Call<List<LockerApiResponse>>, response: Response<List<LockerApiResponse>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val lockerList = response.body()!!.map { lockerApiResponse ->
+                        Locker.fromDto(lockerApiResponse)
+                    }
+                    callback(lockerList)
+                } else {
+                    callback(emptyList())
+                }
             }
 
-            Locker(
-                id = id,
-                status = status,
-                lastAccessTime = if (status == LockerStatus.OCCUPIED) System.currentTimeMillis() else null,
-                assignedUser = if (status == LockerStatus.OCCUPIED) "User${id}" else null,
-                location = "Row ${(id - 1) / 6 + 1}, Column ${(id - 1) % 6 + 1}"
-            )
-        }
-    }
-
-    fun getLocker(id: Int): Locker? {
-        return _lockers.value.find { it.id == id }
-    }
-
-    fun updateLockerStatus(lockerId: Int, newStatus: LockerStatus, assignedUser: String? = null): Boolean {
-        val currentLockers = _lockers.value.toMutableList()
-        val lockerIndex = currentLockers.indexOfFirst { it.id == lockerId }
-
-        if (lockerIndex != -1) {
-            val currentLocker = currentLockers[lockerIndex]
-            val updatedLocker = currentLocker.copy(
-                status = newStatus,
-                lastAccessTime = System.currentTimeMillis(),
-                assignedUser = if (newStatus == LockerStatus.OCCUPIED) assignedUser else null
-            )
-
-            currentLockers[lockerIndex] = updatedLocker
-            _lockers.value = currentLockers
-            return true
-        }
-        return false
-    }
-
-    fun getAvailableLockers(): List<Locker> {
-        return _lockers.value.filter { it.status == LockerStatus.AVAILABLE }
-    }
-
-    fun getOccupiedLockers(): List<Locker> {
-        return _lockers.value.filter { it.status == LockerStatus.OCCUPIED }
-    }
-
-    fun getMaintenanceLockers(): List<Locker> {
-        return _lockers.value.filter { it.status == LockerStatus.OVERDUE }
-    }
-
-    fun getStatusCounts(): Triple<Int, Int, Int> {
-        val lockers = _lockers.value
-        val available = lockers.count { it.status == LockerStatus.AVAILABLE }
-        val occupied = lockers.count { it.status == LockerStatus.OCCUPIED }
-        val maintenance = lockers.count { it.status == LockerStatus.OVERDUE }
-        return Triple(available, occupied, maintenance)
-    }
-
-
-    suspend fun refreshFromServer(): Boolean {
-        // TODO: Implement actual API call
-        // For now, just simulate some random changes
-        val currentLockers = _lockers.value.toMutableList()
-
-        // Randomly change some statuses (simulation)
-        currentLockers.indices.random().let { index ->
-            val locker = currentLockers[index]
-            if (locker.status == LockerStatus.AVAILABLE && Math.random() < 0.1) {
-                currentLockers[index] = locker.copy(
-                    status = LockerStatus.OCCUPIED,
-                    assignedUser = "SimUser${System.currentTimeMillis() % 1000}",
-                    lastAccessTime = System.currentTimeMillis()
-                )
+            override fun onFailure(call: Call<List<LockerApiResponse>>, t: Throwable) {
+                callback(emptyList())
             }
-        }
-
-        _lockers.value = currentLockers
-        return true
+        })
     }
 
-    companion object {
-        @Volatile
-        private var INSTANCE: LockerRepository? = null
-
-        fun getInstance(): LockerRepository {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: LockerRepository().also { INSTANCE = it }
+    fun getClientAuthMethods(clientId: String, callback: (List<String>) -> Unit) {
+        apiService.getClientAuthMethods(clientId).enqueue(object : Callback<com.example.quickstorephilippinesandroidapp.api.ClientAuthMethodsResponse> {
+            override fun onResponse(
+                call: Call<com.example.quickstorephilippinesandroidapp.api.ClientAuthMethodsResponse>,
+                response: Response<com.example.quickstorephilippinesandroidapp.api.ClientAuthMethodsResponse>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    callback(response.body()!!.auth_methods)
+                } else {
+                    callback(emptyList())
+                }
             }
-        }
+
+            override fun onFailure(call: Call<com.example.quickstorephilippinesandroidapp.api.ClientAuthMethodsResponse>, t: Throwable) {
+                callback(emptyList())
+            }
+        })
+    }
+
+    fun controlLockerDoor(doorId: String, actionType: String, userId: String, accessCode: String?, callback: (Boolean, String?) -> Unit) {
+        val request = com.example.quickstorephilippinesandroidapp.api.LockerControlRequest(
+            action_type = actionType,
+            user_id = userId,
+            access_code = accessCode
+        )
+
+        apiService.controlLockerDoor(doorId, request).enqueue(object : Callback<com.example.quickstorephilippinesandroidapp.api.LockerControlResponse> {
+            override fun onResponse(
+                call: Call<com.example.quickstorephilippinesandroidapp.api.LockerControlResponse>,
+                response: Response<com.example.quickstorephilippinesandroidapp.api.LockerControlResponse>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    callback(true, response.body()!!.message)
+                } else {
+                    callback(false, "Failed to control locker door")
+                }
+            }
+
+            override fun onFailure(call: Call<com.example.quickstorephilippinesandroidapp.api.LockerControlResponse>, t: Throwable) {
+                callback(false, t.message)
+            }
+        })
+    }
+
+    fun controlLockerDoorAutoAssign(actionType: String, userId: String, accessCode: String?, callback: (Boolean, String?, String?) -> Unit) {
+        val request = com.example.quickstorephilippinesandroidapp.api.LockerControlRequest(
+            action_type = actionType,
+            user_id = userId,
+            access_code = accessCode
+        )
+
+        apiService.controlLockerDoorAutoAssign(request).enqueue(object : Callback<com.example.quickstorephilippinesandroidapp.api.LockerControlResponse> {
+            override fun onResponse(
+                call: Call<com.example.quickstorephilippinesandroidapp.api.LockerControlResponse>,
+                response: Response<com.example.quickstorephilippinesandroidapp.api.LockerControlResponse>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    callback(true, response.body()!!.message, null)
+                } else {
+                    callback(false, "Failed to auto-assign locker", null)
+                }
+            }
+
+            override fun onFailure(call: Call<com.example.quickstorephilippinesandroidapp.api.LockerControlResponse>, t: Throwable) {
+                callback(false, null, t.message)
+            }
+        })
+    }
+
+    fun assignLockerToUser(doorId: String, userId: String, accessCode: String?, callback: (Boolean, String?) -> Unit) {
+        val request = com.example.quickstorephilippinesandroidapp.api.LockerAssignRequest(
+            user_id = userId,
+            access_code = accessCode
+        )
+
+        apiService.assignLockerToUser(doorId, request).enqueue(object : Callback<com.example.quickstorephilippinesandroidapp.api.LockerAssignResponse> {
+            override fun onResponse(
+                call: Call<com.example.quickstorephilippinesandroidapp.api.LockerAssignResponse>,
+                response: Response<com.example.quickstorephilippinesandroidapp.api.LockerAssignResponse>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    callback(true, response.body()!!.message)
+                } else {
+                    callback(false, "Failed to assign locker")
+                }
+            }
+
+            override fun onFailure(call: Call<com.example.quickstorephilippinesandroidapp.api.LockerAssignResponse>, t: Throwable) {
+                callback(false, t.message)
+            }
+        })
+    }
+
+    fun validateAccessCode(accessCode: String, callback: (Boolean, String?, String?) -> Unit) {
+        val request = com.example.quickstorephilippinesandroidapp.api.ValidateAccessCodeRequest(
+            access_code = accessCode
+        )
+
+        apiService.validateAccessCode(request).enqueue(object : Callback<com.example.quickstorephilippinesandroidapp.api.ValidateAccessCodeResponse> {
+            override fun onResponse(
+                call: Call<com.example.quickstorephilippinesandroidapp.api.ValidateAccessCodeResponse>,
+                response: Response<com.example.quickstorephilippinesandroidapp.api.ValidateAccessCodeResponse>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    callback(true, response.body()!!.user_id, response.body()!!.message)
+                } else {
+                    callback(false, null, "Invalid access code")
+                }
+            }
+
+            override fun onFailure(call: Call<com.example.quickstorephilippinesandroidapp.api.ValidateAccessCodeResponse>, t: Throwable) {
+                callback(false, null, t.message)
+            }
+        })
+    }
+
+    // NEW METHODS:
+    fun pickupItem(doorId: String, userId: String, accessCode: String?, callback: (Boolean, String?) -> Unit) {
+        val request = LockerSessionRequest(
+            user_id = userId,
+            access_code = accessCode,
+            source = "apk"
+        )
+
+        apiService.pickupItem(doorId, request).enqueue(object : Callback<com.example.quickstorephilippinesandroidapp.api.LockerSessionResponse> {
+            override fun onResponse(
+                call: Call<com.example.quickstorephilippinesandroidapp.api.LockerSessionResponse>,
+                response: Response<com.example.quickstorephilippinesandroidapp.api.LockerSessionResponse>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    callback(true, response.body()!!.message)
+                } else {
+                    callback(false, "Failed to process pickup")
+                }
+            }
+
+            override fun onFailure(call: Call<com.example.quickstorephilippinesandroidapp.api.LockerSessionResponse>, t: Throwable) {
+                callback(false, t.message)
+            }
+        })
+    }
+
+    fun endLockerSession(doorId: String, userId: String, accessCode: String?, callback: (Boolean, String?) -> Unit) {
+        val request = LockerSessionRequest(
+            user_id = userId,
+            access_code = accessCode,
+            source = "apk"
+        )
+
+        apiService.endLockerSession(doorId, request).enqueue(object : Callback<com.example.quickstorephilippinesandroidapp.api.LockerSessionResponse> {
+            override fun onResponse(
+                call: Call<com.example.quickstorephilippinesandroidapp.api.LockerSessionResponse>,
+                response: Response<com.example.quickstorephilippinesandroidapp.api.LockerSessionResponse>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    callback(true, response.body()!!.message)
+                } else {
+                    callback(false, "Failed to end session")
+                }
+            }
+
+            override fun onFailure(call: Call<com.example.quickstorephilippinesandroidapp.api.LockerSessionResponse>, t: Throwable) {
+                callback(false, t.message)
+            }
+        })
     }
 }
