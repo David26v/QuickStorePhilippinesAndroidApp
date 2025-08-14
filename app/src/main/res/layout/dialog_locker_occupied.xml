@@ -1,116 +1,303 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Make the dialog wider -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="320dp"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="32dp"
+    android:background="@drawable/dialog_gradient_background">
 
-    <!-- Greeting Section -->
-    <TextView
-        android:id="@+id/dialog_occupied_greeting"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:gravity="center"
-        android:text="Hi [User Name],"
-        android:textSize="22sp"
-        android:textStyle="bold" />
-
-    <!-- Question Section -->
-    <TextView
-        android:id="@+id/dialog_occupied_question"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:gravity="center"
-        android:text="Would you like to end session or pick item?"
-        android:textSize="16sp" />
-
-    <!-- Locker Info Card -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/dialog_occupied_locker_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Locker #XX"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/dialog_occupied_user_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="User ID: XXXX"
-            android:textSize="14sp" />
-
-        <!-- Duration Section -->
-        <TextView
-            android:id="@+id/dialog_occupied_duration_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"
-            android:text="Duration:"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/dialog_occupied_duration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Calculating..."
-            android:textSize="14sp" />
-
-    </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Action Buttons -->
+    <!-- Header with Lock Icon -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="end">
+        android:gravity="center"
+        android:layout_marginBottom="20dp">
 
-    <!-- End Session Button -->
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_lock"
+            android:layout_marginEnd="12dp"
+            android:tint="@color/success_green" />
 
-        <!-- Pick Item Button -->
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_end_session"
-            style="@style/Widget.Material3.Button.TextButton"
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="8dp"
-            android:text="End Session"
-            app:icon="@drawable/ic_logout"
-            app:iconGravity="textStart" />
+            android:layout_height="wrap_content"
+            android:text="LOCKER ACTIVE"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/success_green"
+            android:letterSpacing="0.1" />
 
-        <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_pickup"
-        style="@style/Widget.Material3.Button"
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_check_circle"
+            android:layout_marginStart="12dp"
+            android:tint="@color/success_green" />
+    </LinearLayout>
+
+    <!-- Animated Status Icon -->
+    <ImageView
+        android:id="@+id/status_animation_icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_shopping_bag"
+        android:background="@drawable/circular_success_background"
+        android:padding="20dp"
+        android:tint="@color/success_green" />
+
+    <!-- Greeting Section with User Icon -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="20dp">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_person"
+            android:layout_marginEnd="8dp"
+            android:tint="@color/primary_blue" />
+
+        <TextView
+            android:id="@+id/dialog_occupied_greeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hi [User Name],"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary" />
+    </LinearLayout>
+
+    <!-- Question Message Section with Options Icon -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="28dp"
+        android:background="@drawable/alert_message_background"
+        android:padding="16dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_info"
+            android:layout_marginEnd="8dp"
+            android:tint="@color/primary_blue" />
+
+        <TextView
+            android:id="@+id/dialog_occupied_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Would you like to end session or pick item?"
+            android:textColor="@color/primary_blue"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_schedule"
+            android:layout_marginStart="8dp"
+            android:tint="@color/primary_blue" />
+    </LinearLayout>
+
+    <!-- Enhanced Locker Info Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:strokeWidth="2dp"
+        app:strokeColor="@color/card_stroke">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:background="@drawable/card_gradient_background">
+
+            <!-- Locker Header with Icon -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_lock"
+                    android:layout_marginEnd="12dp"
+                    android:tint="@color/primary_blue" />
+
+                <TextView
+                    android:id="@+id/dialog_occupied_locker_info"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Locker #XX"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_info"
+                    android:tint="@color/info_blue" />
+            </LinearLayout>
+
+            <!-- User ID with Icon -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="20dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_badge"
+                    android:layout_marginEnd="8dp"
+                    android:tint="@color/text_secondary" />
+
+                <TextView
+                    android:id="@+id/dialog_occupied_user_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="User ID: XXXX"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_secondary" />
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider_color"
+                android:layout_marginVertical="12dp" />
+
+            <!-- Duration Section with Timer Icon -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_schedule"
+                    android:layout_marginEnd="8dp"
+                    android:tint="@color/success_green" />
+
+                <TextView
+                    android:id="@+id/dialog_occupied_duration_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Duration:"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/duration_highlight_background"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_access_time"
+                    android:layout_marginEnd="8dp"
+                    android:tint="@color/success_green" />
+
+                <TextView
+                    android:id="@+id/dialog_occupied_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calculating..."
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/success_green" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- ✅ Action Buttons - Icon + Text, Centered -->
+    <!-- Action Buttons - Icon + Text, Side by Side, Centered -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pick Item"
-        app:backgroundTint="@color/error_red"
-        app:icon="@drawable/ic_download"
-        app:iconGravity="textStart" />
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_marginHorizontal="16dp">
+
+        <!-- End Session Button (Icon + Text, Red Outlined) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_end_session"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="END"
+            android:textColor="@color/error_red"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:icon="@drawable/ic_logout"
+            app:iconTint="@color/error_red"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:strokeColor="@color/error_red"
+            app:cornerRadius="28dp"
+            android:contentDescription="End Session" />
+
+        <!-- Pick Item Button (Icon + Text, Solid Green) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_pickup"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="PICK"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:icon="@drawable/ic_shopping_bag"
+            app:iconTint="@color/white"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:backgroundTint="@color/success_green"
+            app:cornerRadius="28dp"
+            app:elevation="4dp"
+            android:contentDescription="Pick Item" />
 
     </LinearLayout>
 
-    </LinearLayout>
+</LinearLayout>
