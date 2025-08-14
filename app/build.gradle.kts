@@ -61,7 +61,6 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:gotrue-kt:2.0.0")
     implementation("io.github.jan-tennert.supabase:realtime-kt:2.0.0")
 
-<<<<<<< Updated upstream
     implementation("io.github.jan-tennert.supabase:storage-kt:2.0.0")
     // HTTP Client
     implementation("io.ktor:ktor-client-android:2.3.4")
@@ -69,8 +68,7 @@ dependencies {
 // JSON Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-}
-=======
+
     // ✅ Optional: Logging interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
@@ -107,4 +105,3 @@ dependencies {
 
 
 }
->>>>>>> Stashed changes
