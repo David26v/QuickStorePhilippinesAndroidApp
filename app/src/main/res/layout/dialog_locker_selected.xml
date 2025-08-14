@@ -38,7 +38,7 @@
         android:textStyle="bold"
         android:textColor="@color/black"
         android:layout_marginBottom="12dp"
-        android:gravity="center"/>
+        android:gravity="center" />
 
     <!-- Access Method Buttons (Vertical) -->
     <LinearLayout
@@ -46,6 +46,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Access Code -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_access_code"
             style="@style/Widget.Material3.Button"
@@ -62,6 +63,7 @@
             app:iconGravity="textStart"
             app:iconPadding="12dp" />
 
+        <!-- QR Code -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_qr_code"
             style="@style/Widget.Material3.Button.OutlinedButton"
@@ -78,6 +80,7 @@
             app:strokeColor="@color/primary_color"
             app:strokeWidth="2dp" />
 
+        <!-- Face Recognition -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_face_recognition"
             style="@style/Widget.Material3.Button.OutlinedButton"
@@ -94,8 +97,9 @@
             app:strokeColor="@color/primary_color"
             app:strokeWidth="2dp" />
 
+        <!-- Palm Scanner -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_fingerprint"
+            android:id="@+id/button_palm_recognition"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -108,6 +112,24 @@
             app:iconPadding="12dp"
             app:strokeColor="@color/primary_color"
             app:strokeWidth="2dp" />
+
+        <!-- Card Reader -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_card_reader"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:text="Swipe Card"
+            android:textColor="@color/primary_color"
+            android:textSize="16sp"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_credit_card"
+            app:iconGravity="textStart"
+            app:iconPadding="12dp"
+            app:strokeColor="@color/primary_color"
+            app:strokeWidth="2dp" />
+
     </LinearLayout>
 
 </LinearLayout>

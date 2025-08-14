@@ -46,4 +46,112 @@
     <color name="text_secondary">#757575</color>
     <color name="white_transparent">#33FFFFFF</color>
 
+    <color name="primary_blue">#1976D2</color>
+    <color name="primary_blue_dark">#0D47A1</color>
+    <color name="primary_blue_light">#BBDEFB</color>
+
+    <!-- Error/Warning Colors -->
+    <color name="error_red_dark">#B71C1C</color>
+    <color name="error_red_light">#FFCDD2</color>
+    <color name="warning_orange">#FF9800</color>
+    <color name="warning_orange_dark">#E65100</color>
+    <color name="warning_orange_light">#FFE0B2</color>
+
+    <!-- Success Colors -->
+    <color name="success_green_dark">#1B5E20</color>
+    <color name="success_green_light">#C8E6C9</color>
+
+    <!-- Info Colors -->
+    <color name="info_blue_dark">#0D47A1</color>
+    <color name="info_blue_light">#E3F2FD</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#212121</color>
+    <color name="text_hint">#BDBDBD</color>
+    <color name="text_disabled">#E0E0E0</color>
+    <color name="text_white">#FFFFFF</color>
+
+    <!-- Background Colors -->
+    <color name="background_white">#FFFFFF</color>
+    <color name="background_light_gray">#FAFAFA</color>
+    <color name="background_gray">#F5F5F5</color>
+    <color name="background_dark_gray">#EEEEEE</color>
+
+    <!-- Card and Surface Colors -->
+    <color name="card_background">#FFFFFF</color>
+    <color name="card_stroke">#E0E0E0</color>
+    <color name="surface_color">#FFFFFF</color>
+    <color name="surface_variant">#F5F5F5</color>
+
+    <!-- Divider and Border Colors -->
+    <color name="divider_color">#E0E0E0</color>
+    <color name="border_light">#F0F0F0</color>
+    <color name="border_medium">#DDDDDD</color>
+    <color name="border_dark">#CCCCCC</color>
+
+    <!-- Overlay Colors -->
+    <color name="overlay_light">#10000000</color>
+    <color name="overlay_medium">#40000000</color>
+    <color name="overlay_dark">#80000000</color>
+
+    <!-- Accent Colors -->
+    <color name="accent_purple">#9C27B0</color>
+    <color name="accent_teal">#009688</color>
+    <color name="accent_amber">#FFC107</color>
+    <color name="accent_pink">#E91E63</color>
+
+    <!-- Status Colors -->
+    <color name="status_online">#4CAF50</color>
+    <color name="status_offline">#9E9E9E</color>
+    <color name="status_busy">#F44336</color>
+    <color name="status_away">#FF9800</color>
+
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#E3F2FD</color>
+    <color name="gradient_middle">#BBDEFB</color>
+    <color name="gradient_end">#90CAF9</color>
+
+    <!-- Button Colors -->
+    <color name="button_primary">#1976D2</color>
+    <color name="button_primary_pressed">#0D47A1</color>
+    <color name="button_secondary_pressed">#424242</color>
+    <color name="button_danger">#D32F2F</color>
+    <color name="button_danger_pressed">#B71C1C</color>
+
+    <!-- Transparent Colors -->
+    <color name="transparent">#00000000</color>
+    <color name="semi_transparent_white">#80FFFFFF</color>
+    <color name="semi_transparent_black">#80000000</color>
+
+    <!-- Material Design System Colors -->
+    <color name="md_theme_primary">#1976D2</color>
+    <color name="md_theme_on_primary">#FFFFFF</color>
+    <color name="md_theme_primary_container">#E3F2FD</color>
+    <color name="md_theme_on_primary_container">#0D47A1</color>
+    <color name="md_theme_secondary">#757575</color>
+    <color name="md_theme_on_secondary">#FFFFFF</color>
+    <color name="md_theme_secondary_container">#F5F5F5</color>
+    <color name="md_theme_on_secondary_container">#212121</color>
+    <color name="md_theme_surface">#FFFFFF</color>
+    <color name="md_theme_on_surface">#212121</color>
+    <color name="md_theme_surface_variant">#F5F5F5</color>
+    <color name="md_theme_on_surface_variant">#757575</color>
+    <color name="md_theme_error">#D32F2F</color>
+    <color name="md_theme_on_error">#FFFFFF</color>
+
+
+    <color name="premium_primary">#1565C0</color>
+    <color name="premium_primary_dark">#0D47A1</color>
+    <color name="premium_text_primary">#1A237E</color>
+    <color name="premium_text_secondary">#666666</color>
+    <color name="premium_button_background">#F8F9FA</color>
+    <color name="premium_button_text">#1A237E</color>
+    <color name="premium_warning_background">#FFF3E0</color>
+    <color name="premium_warning_text">#FF8F00</color>
+    <color name="premium_danger_background">#FFEBEE</color>
+    <color name="premium_danger_text">#D32F2F</color>
+    <color name="premium_success">#2E7D32</color>
+    <color name="premium_surface">#FFFFFF</color>
+    <color name="premium_border">#E1E5E9</color>
+
 </resources>

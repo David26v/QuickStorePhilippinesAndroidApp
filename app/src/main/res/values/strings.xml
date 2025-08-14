@@ -23,5 +23,6 @@
     <string name="status_available">Available</string>
     <string name="status_occupied">Occupied</string>
     <string name="status_maintenance">Maintenance</string>
+    <string name="menu_admin">Admin</string>
 
 </resources>

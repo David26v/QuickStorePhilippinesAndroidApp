@@ -13,16 +13,37 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+<<<<<<< Updated upstream
 import com.example.quickstorephilippinesandroidapp.databinding.ActivityMainBinding
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
+=======
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.*
+import com.example.quickstorephilippinesandroidapp.databinding.ActivityMainBinding
+import com.google.android.material.navigation.NavigationView
+import com.ys.rkapi.MyManager
+>>>>>>> Stashed changes
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+<<<<<<< Updated upstream
+=======
+    private lateinit var drawerLayout: DrawerLayout
+
+    companion object {
+        var CLIENT_ID: String? = null
+        var DEVICE_ID: String? = null
+        var onClientIdAvailable: (() -> Unit)? = null
+        var myManager: MyManager? = null
+    }
+>>>>>>> Stashed changes
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+<<<<<<< Updated upstream
         setSupportActionBar(binding.appBarMain.toolbar)
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
@@ -130,6 +152,61 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+=======
+        Log.d("MainActivity", "onCreate called")
+        Log.d("MainActivity", "CLIENT_ID on start: $CLIENT_ID")
+        Log.d("MainActivity", "DEVICE_ID: $DEVICE_ID")
+
+        // Setup Toolbar
+        setSupportActionBar(binding.appBarMain.toolbar)
+
+        drawerLayout = binding.drawerLayout
+        val navView: NavigationView = binding.navView
+
+        // ✅ Get NavHostFragment and NavController
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
+
+        val navController = navHostFragment.navController // ✅ Fixed: navController (not navhostController)
+
+        // Configure ActionBar and Drawer
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_admin),
+            drawerLayout
+        )
+
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
+
+        // ✅ Initialize YFACE SDK
+        initYFaceSdk()
+    }
+
+    private fun initYFaceSdk() {
+        try {
+            myManager = MyManager.getInstance(this)
+            myManager?.bindAIDLService(this)
+
+            myManager?.setConnectClickInterface(object : MyManager.ServiceConnectedInterface {
+                override fun onConnect() {
+                    Log.d("YFACE SDK", "✅ AIDL Service connected!")
+                    myManager?.gpioManager?.pullUpWhiteLight()
+                }
+            })
+        } catch (e: Exception) {
+            Log.e("YFACE SDK", "❌ Failed to initialize", e)
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onDestroy() {
+        myManager?.unBindAIDLService(this)
+        super.onDestroy()
+>>>>>>> Stashed changes
     }
 
     @SuppressLint("HardwareIds")

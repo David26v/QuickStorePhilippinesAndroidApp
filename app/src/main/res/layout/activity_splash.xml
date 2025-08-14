@@ -1,35 +1,185 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- res/layout/activity_splash.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:background="#212121"> <!-- Dark grey background -->
+    android:background="#212121">
 
-    <!-- Quick Store Logo -->
-    <ImageView
-        android:id="@+id/logoImageView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/logo_white_bg"
-        android:contentDescription="Quick Store Logo" />
+    <!-- Animated Background Circles -->
+    <View
+        android:id="@+id/backgroundCircle1"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="-100dp"
+        android:layout_marginEnd="-100dp"
+        android:background="@drawable/circle_accent_alpha"
+        android:alpha="0.1" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
+    <View
+        android:id="@+id/backgroundCircle2"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="-150dp"
+        android:layout_marginStart="-150dp"
+        android:background="@drawable/circle_primary_alpha"
+        android:alpha="0.08" />
+
+    <!-- Main Content Container -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:layout_gravity="center"
-        android:layout_marginTop="32dp"
-        android:indeterminateTint="#FFFFFF" /> <!-- White progress bar -->
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp">
 
-    <TextView
-        android:layout_width="wrap_content"
+        <!-- Logo Container with Shadow -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/logoCard"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            app:cardCornerRadius="90dp"
+            app:cardElevation="24dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            android:layout_marginBottom="48dp">
+
+            <ImageView
+                android:id="@+id/logoImageView"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_white_bg"
+                android:contentDescription="Quick Store Logo"
+                android:scaleType="centerInside" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/appNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="QuickStore"
+            android:textColor="#FFFFFF"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-light"
+            android:letterSpacing="0.1"
+            android:layout_marginBottom="8dp"
+            android:alpha="0"
+            android:translationY="20dp" />
+
+        <!-- Subtitle -->
+        <TextView
+            android:id="@+id/subtitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Philippines"
+            android:textColor="#B3FFFFFF"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif"
+            android:letterSpacing="0.15"
+            android:layout_marginBottom="64dp"
+            android:alpha="0"
+            android:translationY="20dp" />
+
+        <!-- Modern Progress Indicator -->
+        <LinearLayout
+            android:id="@+id/progressContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="24dp"
+            android:alpha="0">
+
+            <!-- Custom Progress Dots -->
+            <View
+                android:id="@+id/progressDot1"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_margin="4dp"
+                android:background="@drawable/progress_dot"
+                android:alpha="1.0" />
+
+            <View
+                android:id="@+id/progressDot2"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_margin="4dp"
+                android:background="@drawable/progress_dot"
+                android:alpha="0.3" />
+
+            <View
+                android:id="@+id/progressDot3"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_margin="4dp"
+                android:background="@drawable/progress_dot"
+                android:alpha="0.3" />
+
+            <View
+                android:id="@+id/progressDot4"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_margin="4dp"
+                android:background="@drawable/progress_dot"
+                android:alpha="0.3" />
+
+        </LinearLayout>
+
+        <!-- Fallback Progress Bar (hidden by default) -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_marginBottom="24dp"
+            android:indeterminateTint="#FFFFFF"
+            android:visibility="gone" />
+
+        <!-- Status Message -->
+        <TextView
+            android:id="@+id/statusTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Initializing your Locker Experience..."
+            android:textColor="#B3FFFFFF"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:alpha="0"
+            android:translationY="10dp" />
+
+    </LinearLayout>
+
+    <!-- Bottom Branding -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="QuickStore Philippines"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp"
+        android:alpha="0.7">
 
-</LinearLayout>
+        <View
+            android:layout_width="40dp"
+            android:layout_height="2dp"
+            android:background="#4DFFFFFF"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your trusted Locker companion"
+            android:textColor="#80FFFFFF"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif" />
+
+    </LinearLayout>
+
+</RelativeLayout>

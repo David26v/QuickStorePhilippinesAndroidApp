@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔐 Admin Panel"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="32dp" />
+
+        <!-- Register New User -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRegisterUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Register New User"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"
+            android:padding="16dp"
+            style="@style/Widget.MaterialComponents.Button" />
+
+        <!-- Register Card -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRegisterCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Register Card"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"
+            android:padding="16dp"
+            style="@style/Widget.MaterialComponents.Button" />
+
+        <!-- Register Face -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRegisterFace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Register Face"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"
+            android:padding="16dp"
+            style="@style/Widget.MaterialComponents.Button" />
+
+        <!-- Register Palm -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRegisterPalm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Register Palm"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"
+            android:padding="16dp"
+            style="@style/Widget.MaterialComponents.Button" />
+
+        <!-- Set Access Code -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSetAccessCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Set Access Code"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"
+            android:padding="16dp"
+            style="@style/Widget.MaterialComponents.Button" />
+
+        <!-- View Logs -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnViewLogs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Logs"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"
+            android:padding="16dp"
+            style="@style/Widget.MaterialComponents.Button" />
+
+        <!-- Settings -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"
+            android:padding="16dp"
+            style="@style/Widget.MaterialComponents.Button" />
+
+    </LinearLayout>
+
+</ScrollView>

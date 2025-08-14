@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/black"
+    android:fitsSystemWindows="true">
+
+    <!-- Top Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="@android:color/white"
+            android:contentDescription="Back" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Face Recognition"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="64dp" />
+
+    </LinearLayout>
+
+    <!-- Camera Preview Container -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- Camera Preview Background -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#333333" />
+
+        <!-- Face Detection Frame -->
+        <View
+            android:id="@+id/face_detection_frame"
+            android:layout_width="250dp"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/face_detection_frame" />
+
+        <!-- Scanning Animation Overlay -->
+        <View
+            android:id="@+id/scanning_line"
+            android:layout_width="250dp"
+            android:layout_height="4dp"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/face_detection_frame"
+            android:background="#4CAF50"
+            android:alpha="0.8"
+            android:visibility="gone" />
+
+        <!-- Corner Guidelines -->
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignStart="@id/face_detection_frame"
+            android:layout_alignTop="@id/face_detection_frame"
+            android:src="@drawable/corner_top_left"
+            android:tint="@android:color/white" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignEnd="@id/face_detection_frame"
+            android:layout_alignTop="@id/face_detection_frame"
+            android:src="@drawable/corner_top_right"
+            android:tint="@android:color/white" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignStart="@id/face_detection_frame"
+            android:layout_alignBottom="@id/face_detection_frame"
+            android:src="@drawable/corner_bottom_left"
+            android:tint="@android:color/white" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignEnd="@id/face_detection_frame"
+            android:layout_alignBottom="@id/face_detection_frame"
+            android:src="@drawable/corner_bottom_right"
+            android:tint="@android:color/white" />
+
+    </RelativeLayout>
+
+    <!-- Status Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center">
+
+        <!-- Status Indicator -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
+
+            <View
+                android:id="@+id/face_status_indicator"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/status_indicator_detecting" />
+
+            <TextView
+                android:id="@+id/face_status_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Detecting Face..."
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Instruction Text -->
+        <TextView
+            android:id="@+id/face_instruction_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Position your face within the frame\nKeep your head steady and look at the camera"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_marginBottom="24dp"
+            android:lineSpacingExtra="4dp" />
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/button_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Cancel"
+                android:textColor="@android:color/white"
+                android:background="@drawable/button_transparent_border"
+                android:layout_marginEnd="16dp"
+                android:minWidth="120dp" />
+
+            <Button
+                android:id="@+id/button_retry"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Retry"
+                android:textColor="@android:color/white"
+                android:background="@drawable/button_primary"
+                android:enabled="false"
+                android:minWidth="120dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

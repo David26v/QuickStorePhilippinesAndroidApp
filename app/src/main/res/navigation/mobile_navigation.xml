@@ -22,4 +22,23 @@
         android:name="com.example.quickstorephilippinesandroidapp.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+
+    <!-- Admin Fragment -->
+    <fragment
+        android:id="@+id/nav_admin"
+        android:name="com.example.quickstorephilippinesandroidapp.ui.admin.AdminFragment"
+        android:label="@string/menu_admin"
+        tools:layout="@layout/fragment_admin">
+        <action
+            android:id="@+id/action_admin_to_panel"
+            app:destination="@+id/nav_admin_panel" />
+    </fragment>
+
+    <!-- Admin Panel Fragment -->
+    <fragment
+        android:id="@+id/nav_admin_panel"
+        android:name="com.example.quickstorephilippinesandroidapp.ui.admin.AdminPanelFragment"
+        android:label="Admin Panel"
+        tools:layout="@layout/fragment_admin_panel" />
+
 </navigation>
