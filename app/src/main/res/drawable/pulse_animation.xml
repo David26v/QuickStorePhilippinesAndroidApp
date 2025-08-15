@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:oneshot="false">
-    <item android:duration="500">
-        <shape android:shape="oval">
-            <solid android:color="#4CAF50" />
-            <size android:width="12dp" android:height="12dp" />
+
+    <item android:duration="600">
+        <shape android:shape="ring"
+            android:innerRadius="4dp"
+            android:thickness="2dp"
+            android:useLevel="false">
+            <solid android:color="#80FF0000" />
         </shape>
     </item>
-    <item android:duration="500">
-        <shape android:shape="oval">
-            <solid android:color="#8BC34A" />
-            <size android:width="14dp" android:height="14dp" />
+
+    <item android:duration="600">
+        <shape android:shape="ring"
+            android:innerRadius="6dp"
+            android:thickness="1dp"
+            android:useLevel="false">
+            <solid android:color="#40FF0000" />
         </shape>
     </item>
+
 </animation-list>

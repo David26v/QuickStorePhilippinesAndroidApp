@@ -1,23 +1,27 @@
 package data
 
+import android.content.Context
+import android.graphics.Color
+import androidx.core.content.ContextCompat
+
 data class Locker(
     val id: Int,
-<<<<<<< Updated upstream
-=======
     val doorId: String,
->>>>>>> Stashed changes
     val status: LockerStatus,
     val lastAccessTime: Long? = null,
-    val assignedUser: String? = null,
+    val assignedUser: AssignedUserInfo? = null,
     val location: String? = null
 ) {
     fun getStatusColor(): Int {
         return when (status) {
-            LockerStatus.AVAILABLE -> android.R.color.holo_green_light
-            LockerStatus.OCCUPIED -> android.R.color.holo_red_light
-            LockerStatus.OVERDUE -> android.R.color.holo_orange_light
+            LockerStatus.AVAILABLE -> Color.parseColor("#4CAF50")  // Rich green
+            LockerStatus.OCCUPIED -> Color.parseColor("#FF9800")   // Orange
+            LockerStatus.OVERDUE -> Color.parseColor("#F44336")    // Red
         }
     }
+
+
+
 
     fun getStatusText(): String {
         return when (status) {
@@ -28,11 +32,6 @@ data class Locker(
     }
 
     fun isAccessible(): Boolean {
-<<<<<<< Updated upstream
-        return status != LockerStatus.OVERDUE
-    }
-}
-=======
         return true // Make all lockers accessible for now
     }
 
@@ -69,7 +68,7 @@ data class Locker(
             }
 
             val assignedUser = dto.assignedUser?.let {
-                AssignedUserInfo(
+                AssignedUserInfo(  // ✅ Now exists
                     userId = it.userId,
                     firstName = it.firstName,
                     lastName = it.lastName
@@ -97,10 +96,7 @@ data class AssignedUserInfo(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is AssignedUserInfo) return false
-
-        return userId == other.userId &&
-                firstName == other.firstName &&
-                lastName == other.lastName
+        return userId == other.userId && firstName == other.firstName && lastName == other.lastName
     }
 
     override fun hashCode(): Int {
@@ -111,9 +107,3 @@ data class AssignedUserInfo(
     }
 }
 
-enum class LockerStatus {
-    AVAILABLE,
-    OCCUPIED,
-    OVERDUE
-}
->>>>>>> Stashed changes

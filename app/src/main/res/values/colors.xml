@@ -154,4 +154,32 @@
     <color name="premium_surface">#FFFFFF</color>
     <color name="premium_border">#E1E5E9</color>
 
+
+    <color name="icon_tint_color">#757575</color>
+    <color name="primary_text_color">#212121</color>
+    <color name="secondary_text_color">#757575</color>
+    <color name="duration_text_color">#FFFFFF</color>
+
+
+    <!-- Status Indicator Colors with Alpha -->
+    <color name="success_green_alpha">#804CAF50</color>
+    <color name="warning_orange_alpha">#80FF9800</color>
+    <color name="error_red_alpha">#80F44336</color>
+
+
+
+    <color name="control_panel_background">#FFFFFF</color>
+    <color name="locker_grid_background">#FAFBFC</color>
+
+
+
+    <!-- Locker Status Colors -->
+    <color name="locker_available">#4CAF50</color>
+    <color name="locker_occupied">#FF9800</color>
+    <color name="locker_overdue">#F44336</color>
+    <color name="locker_maintenance">#9E9E9E</color>
+
+    <!-- Card Colors -->
+    <color name="card_shadow">#1A000000</color>
+
 </resources>

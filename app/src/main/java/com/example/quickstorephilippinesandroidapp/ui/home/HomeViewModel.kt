@@ -1,32 +1,27 @@
 package com.example.quickstorephilippinesandroidapp.ui.home
 
-<<<<<<< Updated upstream
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-=======
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
-import com.example.quickstorephilippinesandroidapp.data.Locker
-import com.example.quickstorephilippinesandroidapp.repository.LockerRepository
-import com.example.quickstorephilippinesandroidapp.data.LockerStatus
-import com.example.quickstorephilippinesandroidapp.data.AssignedUserInfo
+import data.Locker
+import repository.LockerRepository
+import data.LockerStatus
+import data.AssignedUserInfo
 import database.entity.LockerDatabase
 import database.entity.LocalLockerDoor
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
->>>>>>> Stashed changes
 
 fun LocalLockerDoor.toDomain(): Locker {
+    Log.d("HomeViewModel", "Converting door: $id, status: $status, assignedUser: $assignedUserId")  // 🔥 Add this
+
     val statusEnum = when (status.lowercase()) {
         "occupied", "in_use", "locked" -> LockerStatus.OCCUPIED
         "overdue" -> LockerStatus.OVERDUE
         else -> LockerStatus.AVAILABLE
     }
 
-<<<<<<< Updated upstream
-=======
     val assignedUser = assignedUserId?.let {
         AssignedUserInfo(
             userId = it,
@@ -56,18 +51,17 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     // ✅ Live data from Room with deduplication
     val lockers: LiveData<List<Locker>> = dao.getAllDoors()
-        .distinctUntilChanged() // Prevent identical DB lists
-        .map { list -> list.map { it.toDomain() } }
-        .distinctUntilChanged() // Prevent identical Locker lists
+        .map { list ->
+            list.map { it.toDomain() }.also {
+                Log.d("HomeViewModel", "🔁 Mapped ${list.size} doors to domain models")
+            }
+        }
         .asLiveData(viewModelScope.coroutineContext)
 
->>>>>>> Stashed changes
     private val _text = MutableLiveData<String>().apply {
         value = "Welcome to the Quick Store locker "
     }
     val text: LiveData<String> = _text
-<<<<<<< Updated upstream
-=======
 
     fun loadLockers(clientId: String) {
         val now = System.currentTimeMillis()
@@ -79,6 +73,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             try {
                 val remoteLockers: List<Locker> = repository.getLockersSuspend(clientId)
+                Log.d("HomeViewModel", "✅ Fetched ${remoteLockers.size} lockers from API")  // 🔥 Add this
 
                 val entities = remoteLockers.map { locker ->
                     LocalLockerDoor(
@@ -105,12 +100,15 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     )
                 }
 
+                Log.d("HomeViewModel", "💾 Inserting ${entities.size} lockers into Room")  // 🔥 Add this
                 if (entities.isNotEmpty()) {
-                    dao.insertLockerDoor(entities) // ✅ Pass list directly
+                    dao.insertLockerDoor(entities)
+                } else {
+                    Log.w("HomeViewModel", "⚠️ No lockers to insert — remote list is empty")
                 }
             } catch (e: Exception) {
+                Log.e("HomeViewModel", "❌ Error fetching lockers", e)  // 🔥 Add full error
                 e.printStackTrace()
-                // Still show cached data
             }
         }
     }
@@ -148,5 +146,4 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun endLockerSession(doorId: String, userId: String, accessCode: String?, callback: (Boolean, String?) -> Unit) {
         repository.endLockerSession(doorId, userId, accessCode, callback)
     }
->>>>>>> Stashed changes
 }

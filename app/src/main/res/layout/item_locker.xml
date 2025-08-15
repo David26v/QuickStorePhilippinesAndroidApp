@@ -1,0 +1,40 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/locker_card"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+
+    app:layout_flexBasisPercent="25%"
+    app:layout_flexGrow="0"
+    app:layout_alignSelf="stretch"
+
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:layout_flexShrink="1"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/locker_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="L01"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:shadowColor="#000000"
+            android:shadowRadius="2"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:includeFontPadding="false" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
