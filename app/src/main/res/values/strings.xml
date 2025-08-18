@@ -25,4 +25,26 @@
     <string name="status_maintenance">Maintenance</string>
     <string name="menu_admin">Admin</string>
 
+
+    <!-- User Registration Screen -->
+    <string name="register_new_user">Register New User</string>
+    <string name="create_new_user_account">Create New User Account</string>
+    <string name="full_name_hint">Full Name</string>
+    <string name="email_address_hint">Email Address</string>
+    <string name="access_code_hint">Access Code (7 digits)</string>
+    <string name="generate_new_code">Generate New Code</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Existing strings (from previous fixes) -->
+    <string name="new_access_code_generated">New access code generated</string>
+    <string name="access_code_copied">Access code copied to clipboard</string>
+    <string name="registering">Registering…</string>
+    <string name="register_user">Register User</string>
+    <string name="user_registered_success">User registered successfully!</string>
+    <string name="full_name_required">Full name is required</string>
+    <string name="email_required">Email is required</string>
+    <string name="valid_email_required">Please enter a valid email address</string>
+    <string name="access_code_required">Access code is required</string>
+    <string name="seven_digit_code_required">Access code must be exactly 7 digits</string>
+
 </resources>

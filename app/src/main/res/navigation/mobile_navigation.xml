@@ -5,25 +5,28 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/nav_home">
 
+    <!-- Home Screen -->
     <fragment
         android:id="@+id/nav_home"
         android:name="com.example.quickstorephilippinesandroidapp.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
+    <!-- Gallery Screen -->
     <fragment
         android:id="@+id/nav_gallery"
         android:name="com.example.quickstorephilippinesandroidapp.ui.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_gallery" />
 
+    <!-- Slideshow Screen -->
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="com.example.quickstorephilippinesandroidapp.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
 
-    <!-- Admin Fragment -->
+    <!-- Admin Entry Fragment -->
     <fragment
         android:id="@+id/nav_admin"
         android:name="com.example.quickstorephilippinesandroidapp.ui.admin.AdminFragment"
@@ -34,11 +37,82 @@
             app:destination="@+id/nav_admin_panel" />
     </fragment>
 
-    <!-- Admin Panel Fragment -->
+    <!-- Admin Panel -->
     <fragment
         android:id="@+id/nav_admin_panel"
         android:name="com.example.quickstorephilippinesandroidapp.ui.admin.AdminPanelFragment"
         android:label="Admin Panel"
-        tools:layout="@layout/fragment_admin_panel" />
+        tools:layout="@layout/fragment_admin_panel">
+
+        <!-- Face Registration -->
+        <action
+            android:id="@+id/action_to_register_face"
+            app:destination="@+id/nav_register_face" />
+
+        <!-- Other Admin Actions -->
+        <action
+            android:id="@+id/action_to_register_user"
+            app:destination="@+id/nav_register_user" />
+        <action
+            android:id="@+id/action_to_register_card"
+            app:destination="@+id/nav_register_card" />
+        <action
+            android:id="@+id/action_to_set_access_code"
+            app:destination="@+id/nav_set_access_code" />
+        <action
+            android:id="@+id/action_to_view_logs"
+            app:destination="@+id/nav_view_logs" />
+        <action
+            android:id="@+id/action_to_settings"
+            app:destination="@+id/nav_settings" />
+    </fragment>
+
+    <!-- User Registration -->
+    <fragment
+        android:id="@+id/nav_register_user"
+        android:name="com.example.quickstorephilippinesandroidapp.ui.admin.UserRegistrationFragment"
+        android:label="Register User"
+        tools:layout="@layout/fragment_user_registration" />
+
+    <!-- Card Registration -->
+    <fragment
+        android:id="@+id/nav_register_card"
+        android:name="com.example.quickstorephilippinesandroidapp.ui.admin.RegisterCardFragment"
+        android:label="Register Card"
+        tools:layout="@layout/fragment_register_card" />
+
+    <!-- FACE REGISTRATION FLOW -->
+    <fragment
+        android:id="@+id/nav_register_face"
+        android:name="com.example.quickstorephilippinesandroidapp.ui.admin.RegisterFaceFragment"
+        android:label="Register Face"
+        tools:layout="@layout/fragment_register_face">
+        <action
+            android:id="@+id/action_registerFace_to_panel"
+            app:destination="@+id/nav_admin_panel"
+            app:popUpTo="@id/nav_admin_panel"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Optional: Settings & Logs (Uncomment when implemented) -->
+    <!--
+    <fragment
+        android:id="@+id/nav_set_access_code"
+        android:name="com.example.quickstorephilippinesandroidapp.ui.admin.SetAccessCodeFragment"
+        android:label="Set Access Code"
+        tools:layout="@layout/fragment_set_access_code" />
+
+    <fragment
+        android:id="@+id/nav_view_logs"
+        android:name="com.example.quickstorephilippinesandroidapp.ui.admin.ViewLogsFragment"
+        android:label="View Logs"
+        tools:layout="@layout/fragment_view_logs" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.example.quickstorephilippinesandroidapp.ui.settings.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings" />
+    -->
 
 </navigation>

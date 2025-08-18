@@ -1,3 +1,5 @@
+// File: database/entity/LockerDatabase.kt
+
 package database.entity
 
 import android.content.Context
@@ -5,6 +7,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import migration.MIGRATION_1_2
+
 
 @Database(
     entities = [
@@ -13,10 +17,10 @@ import androidx.room.TypeConverters
         LocalLockerDoorEvent::class,
         LocalUserCredential::class
     ],
-    version = 1,
+    version = 3,
     exportSchema = false
 )
-@TypeConverters(Converters::class) // No need for full package path
+@TypeConverters(Converters::class)
 abstract class LockerDatabase : RoomDatabase() {
     abstract fun lockerDao(): LockerDao
 
@@ -31,6 +35,8 @@ abstract class LockerDatabase : RoomDatabase() {
                     LockerDatabase::class.java,
                     "locker_database"
                 )
+                    .addMigrations(MIGRATION_1_2)
+                    // Wipe and rebuild on schema change — safe because cloud backup
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance

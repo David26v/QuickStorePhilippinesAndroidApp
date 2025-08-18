@@ -18,6 +18,7 @@ interface ApiService {
     @GET("api/lockers/client-from-locker/{locker_id}")
     fun getClientIdFromLocker(@Path("locker_id") lockerId: String): Call<ClientIdResponse>
 
+
     @GET("api/clients/get_client_methods/{client_id}")
     fun getClientAuthMethods(@Path("client_id") clientId: String): Call<ClientAuthMethodsResponse>
 

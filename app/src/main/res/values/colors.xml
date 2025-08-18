@@ -181,5 +181,13 @@
 
     <!-- Card Colors -->
     <color name="card_shadow">#1A000000</color>
+    <color name="blue_primary">#2196F3</color>
+    <color name="green_success">#4CAF50</color>
+    <color name="orange">#FF9800</color>
+
+    <color name="blue_500">#2196F3</color>
+    <color name="green_500">#4CAF50</color>
+    <color name="gray_300">#E0E0E0</color>
+    <color name="gray_400">#CCCCCC</color>
 
 </resources>

@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.quickstorephilippinesandroidapp.databinding.FragmentAdminPanelBinding
+import com.example.quickstorephilippinesandroidapp.R
 
 class AdminPanelFragment : Fragment() {
 
@@ -28,40 +30,45 @@ class AdminPanelFragment : Fragment() {
     }
 
     private fun setupAdminPanel() {
-        // Set up click listeners for admin panel options
-        binding.btnRegisterUser.setOnClickListener {
+        // Set up click listeners for admin panel cards
+        binding.cardRegisterUser.setOnClickListener {
             // Navigate to Register New User
-            // findNavController().navigate(R.id.action_to_register_user)
+            findNavController().navigate(R.id.action_to_register_user)
         }
 
-        binding.btnRegisterCard.setOnClickListener {
+        binding.cardListUsers.setOnClickListener {
+            // Navigate to List Users
+            findNavController().navigate(R.id.action_to_user_management)
+        }
+
+        binding.cardRegisterCard.setOnClickListener {
             // Navigate to Register Card
-            // findNavController().navigate(R.id.action_to_register_card)
+            findNavController().navigate(R.id.action_to_register_card)
         }
 
-        binding.btnRegisterFace.setOnClickListener {
+        binding.cardRegisterFace.setOnClickListener {
             // Navigate to Register Face
-            // findNavController().navigate(R.id.action_to_register_face)
+            findNavController().navigate(R.id.action_to_register_face)
         }
 
-        binding.btnRegisterPalm.setOnClickListener {
+        binding.cardRegisterPalm.setOnClickListener {
             // Navigate to Register Palm
-            // findNavController().navigate(R.id.action_to_register_palm)
+            findNavController().navigate(R.id.action_to_register_palm)
         }
 
-        binding.btnSetAccessCode.setOnClickListener {
+        binding.cardSetAccessCode.setOnClickListener {
             // Navigate to Set Access Code
-            // findNavController().navigate(R.id.action_to_set_access_code)
+            findNavController().navigate(R.id.action_to_set_access_code)
         }
 
-        binding.btnViewLogs.setOnClickListener {
+        binding.cardViewLogs.setOnClickListener {
             // Navigate to View Logs
-            // findNavController().navigate(R.id.action_to_view_logs)
+            findNavController().navigate(R.id.action_to_view_logs)
         }
 
-        binding.btnSettings.setOnClickListener {
+        binding.cardSettings.setOnClickListener {
             // Navigate to Settings
-            // findNavController().navigate(R.id.action_to_settings)
+            findNavController().navigate(R.id.action_to_settings)
         }
     }
 
